@@ -1,4 +1,4 @@
-/// <reference path="./i18n-tools/gen/t8.d.ts"/>
+/// <reference path="./i18n-tools/gen/_t8.d.ts"/>
 
 const welcomeScreenFirstTime = () => <>
   <h1>{t8("onboarding:firstWelcome.helloUserA")({ firstName: "June" })}</h1>

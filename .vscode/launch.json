@@ -7,6 +7,20 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Test i18n",
+            "preLaunchTask": "generate",
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register"
+            ],
+            "cwd": "${workspaceFolder}/i18n-tools/",
+            "args": [
+                "${workspaceFolder}/i18n-tools/test/r.ts"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Generate i18n",
             "runtimeArgs": [
                 "-r",

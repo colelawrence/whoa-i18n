@@ -1,7 +1,10 @@
 export type Translation = {
   en?: string,
   kr?: string,
-  vars?: {[id: string]: string}
+  vars?: {
+    /** id to notes about usage */
+    [id: string]: string
+  }
 }
 
 export type TranslationModule = {

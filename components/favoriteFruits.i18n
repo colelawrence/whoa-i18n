@@ -1,0 +1,26 @@
+ordinaryFruitNames:
+  banana:
+    en: Banana
+    es: Plátano
+  tomato:
+    en: Tomato
+    es: Tomate
+  apple:
+    en: Apple
+    es: Manzana
+
+orange:
+  one:
+    en: Orange
+    es: Naranja
+  two:
+    en: Two Oranges
+    es: Dos Naranjas
+  three:
+    en: Three Oranges
+    es: Tres Naranjas
+  other:
+    en: $n$ Oranges
+    es: $n$ Naranjas
+    vars:
+      n: number of
