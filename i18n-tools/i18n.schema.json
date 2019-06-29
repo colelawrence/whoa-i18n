@@ -1,0 +1,53 @@
+{
+  "type": "object",
+  "propertyNames": {
+    "$comment": "Domain scope must start with a letter and contain only letters, numbers, and underscores",
+    "pattern": "^[A-Za-z][A-Za-z0-9_]+$",
+    "minLength": 3
+  },
+  "additionalProperties": {
+    "type": "object",
+    "propertyNames": {
+      "$comment": "Property must start with a letter and contain only letters, numbers, and underscores",
+      "pattern": "^[A-Za-z][A-Za-z0-9_]+$",
+      "minLength": 3
+    },
+    "additionalProperties": {
+      "$ref": "#/definitions/Translation"
+    }
+  },
+  "definitions": {
+    "Translation": {
+      "type": "object",
+      "properties": {
+        "en": {
+          "type": "string"
+        },
+        "es": {
+          "type": "string"
+        },
+        "kr": {
+          "type": "string"
+        },
+        "fr": {
+          "type": "string"
+        },
+        "vars": {
+          "oneOf": [
+            {
+              "type": "object",
+              "propertyNames": {
+                "$comment": "Variable must start with an non-number and contain only letters, numbers, and underscores",
+                "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+              },
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

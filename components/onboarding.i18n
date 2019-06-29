@@ -1,0 +1,16 @@
+firstWelcome:
+  helloUserA:
+    en: Welcome to MaestroQA $firstName
+    vars:
+      firstName: Example "Camilla"
+  helloUserB:
+    en: Welcome to MaestroQA $firstName $lastName!
+    vars:
+      firstName: Example "Jane"
+      lastName: Example "Singh"
+
+secondWelcome:
+  helloUser:
+    en: Welcome to MaestroQA $firstName
+    vars:
+      firstName: Example "Cole"

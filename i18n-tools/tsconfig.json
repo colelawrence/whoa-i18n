@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "lib": ["esnext"],
+        "target": "es5",
+        "outDir": "out",
+        "jsx": "preserve"
+    },
+    "compileOnSave": false,
+    "include": ["*.ts", "gen/t8-generated.d.ts"]
+}

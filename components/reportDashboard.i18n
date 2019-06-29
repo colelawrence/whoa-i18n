@@ -1,0 +1,13 @@
+topbar:
+  home:
+    en: Home
+  reports:
+    en: Reports
+    kr: akw
+
+sendOutToUsers:
+  nPeople:
+    en: $n people
+    kr: $n people
+    vars:
+      n: number of people

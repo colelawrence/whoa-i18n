@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "lib": ["esnext"],
+        "jsx":"preserve",
+        "outDir": "out",
+        "types": [
+            "./i18n-tools/gen/t8"
+        ],
+        "declaration": true
+    },
+    "compileOnSave": false,
+    "files": [
+        "random-file.tsx"
+    ]
+}
