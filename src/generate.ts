@@ -5,8 +5,6 @@ import { SourceFile, findSourceFiles } from "./sourceFiles";
 
 import * as prettier from "prettier";
 
-const t8JSTemplate = fs.readFileSync(path.resolve("templates/t8.js"), "utf8");
-
 const warn = console.warn.bind(console, "generate.ts");
 
 if (require.main === module) {
@@ -16,48 +14,82 @@ if (require.main === module) {
 async function main() {
   const t8 = await makeT8(await findSourceFiles("."), {
     allowUnspecifiedModules: true,
-    allowKeyPlaceholders: true
+    allowKeyPlaceholders: true,
+    declarationsOnly: false,
+    languages: ["en", "ko", "es"],
+    fnName: "t8",
+    fnTypeId: "t8Export"
   });
-  Promise.all([
-    fs.promises.writeFile(path.resolve("gen/t8.d.ts"), t8.t8DTSEmit),
-    fs.promises.writeFile(
-      path.resolve("gen/t8.js"),
-      '/// <reference path="./t8.d.ts" />\n' + t8.t8JSEmit
-    )
-  ]);
+
+  console.log(t8);
 }
 
-export async function makeT8(files: SourceFile[], opts: GenerateOptions) {
-  const defs = [];
+export type MakeResult = {
+  T: { [sourceId: string]: { [key: string]: Translation } };
+  FnDecl: string;
+  FnName: string;
+  FnTypeId: string;
+};
+
+export async function makeT8(
+  files: SourceFile[],
+  opts: GenerateOptions
+): Promise<MakeResult> {
+  const defs: string[] = [
+    `
+export type Lang = ${opts.languages.map(a => `"${a}"`).join(" | ")}
+
+export type Translation = {
+  /** Variables used in template interpolation */
+  vars?: {
+    /** id to notes about usage */
+    [id: string]: string
+  }
+} & {
+  /** Template for language */
+  [lang in Lang]?: string;
+}
+
+type T = {
+  [sourceId: string]: {
+    [key: string]: Translation;
+  };
+}
+
+interface ${opts.fnTypeId} {
+  langFallbacks: Lang[];
+  lang: Lang;
+}
+`
+  ];
   const ns = {};
   const collectEach = collectInto({ defs, ns }, opts);
   await Promise.all(files.map(collectEach));
 
   if (opts.allowUnspecifiedModules) {
     defs.push(`
-    /** This source does not yet exist */
-    export declare function t8(sourceId: string): {
-      /**
-       * ## Default
-       * Behaves the same way as looking up the key, if it's not found we use the provided placeholder and can log a warning
-       */
-      key(key: string, placeholder: string): {
-        /** ## Default */
-        s: (vars?: any) => string
+    interface ${opts.fnTypeId} {
+      /** This source does not yet exist */
+      (sourceId: string): {
+        /**
+         * ## Default
+         * Behaves the same way as looking up the key, if it's not found we use the provided placeholder and can log a warning
+         */
+        key(key: string, placeholder: string): {
+          /** ## Default */
+          s: (vars?: any) => string
+        };
       };
-    };
+    }
     `);
   } else {
     defs.push(`
-    /** This source does not yet exist */
-    export declare function t8(sourceId: string): never;
+    interface ${opts.fnTypeId} {
+      /** This source does not yet exist */
+      (sourceId: string): never;
+    }
     `);
   }
-
-  const t8JSEmit = t8JSTemplate.replace(
-    "/*#*/ const T = {}; /*#*/",
-    `const T = ${JSON.stringify(ns, null, 2)}\n`
-  );
 
   // we use prettier to both create nice output, and double check that our code is valid
   const t8DTSEmit = prettier.format(defs.join("\n"), {
@@ -65,13 +97,18 @@ export async function makeT8(files: SourceFile[], opts: GenerateOptions) {
     trailingComma: "es5"
   });
 
-  return { t8JSEmit, t8DTSEmit };
+  return {
+    T: ns,
+    FnDecl: t8DTSEmit,
+    FnTypeId: opts.fnTypeId,
+    FnName: opts.fnName
+  };
 }
 
 function collectInto(
   obj: {
     defs: string[];
-    ns: { [key: string]: Translation };
+    ns: { [sourceId: string]: { [key: string]: Translation } };
   },
   opts: GenerateOptions
 ) {
@@ -100,8 +137,12 @@ function collectInto(
 }
 
 type GenerateOptions = {
-  allowUnspecifiedModules?: boolean;
-  allowKeyPlaceholders?: boolean;
+  allowUnspecifiedModules: boolean;
+  allowKeyPlaceholders: boolean;
+  declarationsOnly: boolean;
+  languages: string[];
+  fnName: string;
+  fnTypeId: string;
 };
 
 function generateDefinitions(
@@ -116,17 +157,19 @@ function generateDefinitions(
     throw new Error(`Funny sourceId found "${sourceId}"`);
 
   let res = "";
-  const append = text => (res += `${text}\n`);
+  const append = (text: string) => (res += `${text}\n`);
 
   let types = "\n";
-  const appendTypes = text => (types += `${text}\n`);
+  const appendTypes = (text: string) => (types += `${text}\n`);
 
   append(`//#region source-${sourceId}`);
   const interfaceId = `${sourceId}TM`;
-  append(`/** ${notes} */`);
-  append(
-    `export declare function t8(sourceId: "${sourceId}"): ${interfaceId};`
-  );
+  append(`
+    interface ${opts.fnTypeId} {
+      /** ${notes} */
+      (sourceId: "${sourceId}"): ${interfaceId};
+    }
+  `);
   append(`export interface ${interfaceId} {`);
 
   for (let id in mod) {
@@ -134,13 +177,13 @@ function generateDefinitions(
       const trans = mod[id][variant];
 
       let keyName = toKeyName(id, variant);
-      let docString = transToDocString(keyName, trans);
+      let docString = transToDocString(keyName, opts.languages, trans);
 
       addToTable(sourceId, keyName, trans);
 
       if (trans.vars != null) {
         // vars type
-        let varsTypeId = `T8${sourceId}${id}${variant}Vars`;
+        let varsTypeId = `Tmpl${sourceId}${id}${variant}Vars`;
         let varsTypeString = varsToTypeString(trans.vars);
         appendTypes(`type ${varsTypeId} = ${varsTypeString};`);
 
@@ -180,12 +223,6 @@ function generateDefinitions(
           };
         `);
       }
-
-      // key to string
-      // key to JSX
-      // append(
-      //   `${docString}\ndeclare function t8x(key: "${keyName}"): (vars: ${varsType}) => JSX.Element;`
-      // );
     }
   }
 
@@ -216,31 +253,46 @@ function toKeyName(id: string, variant: string): string {
   return `${id}.${variant}`;
 }
 
-function transToDocString(title: string, trans: Translation): string {
+function transToDocString(
+  title: string,
+  langs: string[],
+  trans: Translation
+): string {
   let prefix = "*No variables*";
-  if (trans.vars != null) {
-    if (trans.vars instanceof Array) {
-      prefix = `Props: \`${trans.vars.join("`, `")}\``;
+  const vars = trans.vars;
+  if (vars != null) {
+    if (vars instanceof Array) {
+      prefix = `Props: \`${vars.join("`, `")}\``;
     } else {
-      prefix = Object.keys(trans.vars)
-        .map(key => `\`${key}\` ${trans.vars[key]}`)
+      prefix = Object.keys(vars)
+        .map(key => `\`${key}\` ${vars[key] || ""}`)
         .join("\\\n * ");
     }
   }
-  return `/**\n * ## ${title}\n * \`${
-    trans.en
-  }\`\\\n * ${prefix}\\\n * **Examples**:\\\n * en: "${trans.en ||
-    ""}";\\\n * kr: "${trans.ko || ""}"; */`;
+  return `/**
+  * ## ${title}
+  * \`${trans.en}\`\\
+  * ${prefix}\\
+  * **Examples**:\\
+  ${langs
+    .map(lang => ` * ${lang}: "${(trans as any)[lang] || ""}"\\`)
+    .join("\n")}
+  */`;
 }
 
 /**
- * @returns "{ /** docs *\/ name: string, /** docs *\/ other: string }"
+ * @returns `{ /** docs *\/ name: string, /** docs *\/ other: string }`
  */
 function varsToTypeString(vars?: Translation["vars"]): string {
   if (vars != null) {
     if (typeof vars === "object") {
       return `{${Object.keys(vars)
-        .map(k => `\n  /** ${vars[k]} */\n  ${k}: string,\n`)
+        .map(
+          k => `
+  /** ${vars[k]} */
+  ${k}: string,
+`
+        )
         .join("")}}`;
     } else {
       warn("vars defined as unexpected value:", vars);

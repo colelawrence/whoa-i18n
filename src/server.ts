@@ -20,12 +20,9 @@ const sources = new SourceFileManager(
 );
 
 app.get("/t8.js", async (_req, res) => {
-  const generated = await gen.makeT8(sources.getFiles(), {
-    allowKeyPlaceholders: true,
-    allowUnspecifiedModules: true
-  });
+  const generated = await ;
 
-  res.contentType("application/javascript").end(generated.t8JSEmit);
+  res.contentType("application/javascript").end(generated.FnDecl);
 });
 
 app.post("/update", async (req, res) => {

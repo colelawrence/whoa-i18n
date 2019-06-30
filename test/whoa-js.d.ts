@@ -1,14 +1,43 @@
+export type Lang = "en" | "es";
+
+export type Translation = {
+  /** Variables used in template interpolation */
+  vars?: {
+    /** id to notes about usage */
+    [id: string]: string;
+  };
+} & {
+  /** Template for language */
+  [lang in Lang]?: string;
+};
+
+type T = {
+  [sourceId: string]: {
+    [key: string]: Translation;
+  };
+};
+
+interface whoaExport {
+  langFallbacks: Lang[];
+  lang: Lang;
+}
+
 //#region source-favoriteFruits
-/** Source: `test/components/favoriteFruits.i18n` */
-export declare function t8(sourceId: "favoriteFruits"): favoriteFruitsTM;
+
+interface whoaExport {
+  /** Source: `test/components/favoriteFruits.i18n` */
+  (sourceId: "favoriteFruits"): favoriteFruitsTM;
+}
+
 export interface favoriteFruitsTM {
   /**
    * ## ordinaryFruitNames.banana
    * `Banana`\
    * *No variables*\
    * **Examples**:\
-   * en: "Banana";\
-   * kr: ""; */
+   * en: "Banana"\
+   * es: "Plátano"\
+   */
   key(
     key: "ordinaryFruitNames.banana"
   ): {
@@ -17,8 +46,9 @@ export interface favoriteFruitsTM {
      * `Banana`\
      * *No variables*\
      * **Examples**:\
-     * en: "Banana";\
-     * kr: ""; */
+     * en: "Banana"\
+     * es: "Plátano"\
+     */
     s: () => string;
   };
 
@@ -36,8 +66,9 @@ export interface favoriteFruitsTM {
    * `Tomato`\
    * *No variables*\
    * **Examples**:\
-   * en: "Tomato";\
-   * kr: ""; */
+   * en: "Tomato"\
+   * es: "Tomate"\
+   */
   key(
     key: "ordinaryFruitNames.tomato"
   ): {
@@ -46,8 +77,9 @@ export interface favoriteFruitsTM {
      * `Tomato`\
      * *No variables*\
      * **Examples**:\
-     * en: "Tomato";\
-     * kr: ""; */
+     * en: "Tomato"\
+     * es: "Tomate"\
+     */
     s: () => string;
   };
 
@@ -65,8 +97,9 @@ export interface favoriteFruitsTM {
    * `Apple`\
    * *No variables*\
    * **Examples**:\
-   * en: "Apple";\
-   * kr: ""; */
+   * en: "Apple"\
+   * es: "Manzana"\
+   */
   key(
     key: "ordinaryFruitNames.apple"
   ): {
@@ -75,8 +108,9 @@ export interface favoriteFruitsTM {
      * `Apple`\
      * *No variables*\
      * **Examples**:\
-     * en: "Apple";\
-     * kr: ""; */
+     * en: "Apple"\
+     * es: "Manzana"\
+     */
     s: () => string;
   };
 
@@ -94,8 +128,9 @@ export interface favoriteFruitsTM {
    * `Orange`\
    * *No variables*\
    * **Examples**:\
-   * en: "Orange";\
-   * kr: ""; */
+   * en: "Orange"\
+   * es: "Naranja"\
+   */
   key(
     key: "orange.one"
   ): {
@@ -104,8 +139,9 @@ export interface favoriteFruitsTM {
      * `Orange`\
      * *No variables*\
      * **Examples**:\
-     * en: "Orange";\
-     * kr: ""; */
+     * en: "Orange"\
+     * es: "Naranja"\
+     */
     s: () => string;
   };
 
@@ -123,8 +159,9 @@ export interface favoriteFruitsTM {
    * `Two Oranges`\
    * *No variables*\
    * **Examples**:\
-   * en: "Two Oranges";\
-   * kr: ""; */
+   * en: "Two Oranges"\
+   * es: "Dos Naranjas"\
+   */
   key(
     key: "orange.two"
   ): {
@@ -133,8 +170,9 @@ export interface favoriteFruitsTM {
      * `Two Oranges`\
      * *No variables*\
      * **Examples**:\
-     * en: "Two Oranges";\
-     * kr: ""; */
+     * en: "Two Oranges"\
+     * es: "Dos Naranjas"\
+     */
     s: () => string;
   };
 
@@ -152,8 +190,9 @@ export interface favoriteFruitsTM {
    * `Three Oranges`\
    * *No variables*\
    * **Examples**:\
-   * en: "Three Oranges";\
-   * kr: ""; */
+   * en: "Three Oranges"\
+   * es: "Tres Naranjas"\
+   */
   key(
     key: "orange.three"
   ): {
@@ -162,8 +201,9 @@ export interface favoriteFruitsTM {
      * `Three Oranges`\
      * *No variables*\
      * **Examples**:\
-     * en: "Three Oranges";\
-     * kr: ""; */
+     * en: "Three Oranges"\
+     * es: "Tres Naranjas"\
+     */
     s: () => string;
   };
 
@@ -181,8 +221,9 @@ export interface favoriteFruitsTM {
    * `$n$ Oranges`\
    * `n` number of\
    * **Examples**:\
-   * en: "$n$ Oranges";\
-   * kr: ""; */
+   * en: "$n$ Oranges"\
+   * es: "$n$ Naranjas"\
+   */
   key(
     key: "orange.other"
   ): {
@@ -191,9 +232,10 @@ export interface favoriteFruitsTM {
      * `$n$ Oranges`\
      * `n` number of\
      * **Examples**:\
-     * en: "$n$ Oranges";\
-     * kr: ""; */
-    s: (vars: T8favoriteFruitsorangeotherVars) => string;
+     * en: "$n$ Oranges"\
+     * es: "$n$ Naranjas"\
+     */
+    s: (vars: TmplfavoriteFruitsorangeotherVars) => string;
   };
 
   /** @deprecated Please remove placeholder to use i18n translations */
@@ -220,7 +262,7 @@ export interface favoriteFruitsTM {
 //#endregion source-favoriteFruits
 //#region source-favoriteFruits-types
 
-type T8favoriteFruitsorangeotherVars = {
+type TmplfavoriteFruitsorangeotherVars = {
   /** number of */
   n: string;
 };
@@ -228,16 +270,21 @@ type T8favoriteFruitsorangeotherVars = {
 //#endregion source-favoriteFruits-types
 
 //#region source-navbar
-/** Source: `test/components/navbar.i18n` */
-export declare function t8(sourceId: "navbar"): navbarTM;
+
+interface whoaExport {
+  /** Source: `test/components/navbar.i18n` */
+  (sourceId: "navbar"): navbarTM;
+}
+
 export interface navbarTM {
   /**
    * ## topbar.home
    * `Home`\
    * *No variables*\
    * **Examples**:\
-   * en: "Home";\
-   * kr: ""; */
+   * en: "Home"\
+   * es: ""\
+   */
   key(
     key: "topbar.home"
   ): {
@@ -246,8 +293,9 @@ export interface navbarTM {
      * `Home`\
      * *No variables*\
      * **Examples**:\
-     * en: "Home";\
-     * kr: ""; */
+     * en: "Home"\
+     * es: ""\
+     */
     s: () => string;
   };
 
@@ -265,8 +313,9 @@ export interface navbarTM {
    * `Reports`\
    * *No variables*\
    * **Examples**:\
-   * en: "Reports";\
-   * kr: "akw"; */
+   * en: "Reports"\
+   * es: ""\
+   */
   key(
     key: "topbar.reports"
   ): {
@@ -275,8 +324,9 @@ export interface navbarTM {
      * `Reports`\
      * *No variables*\
      * **Examples**:\
-     * en: "Reports";\
-     * kr: "akw"; */
+     * en: "Reports"\
+     * es: ""\
+     */
     s: () => string;
   };
 
@@ -307,16 +357,21 @@ export interface navbarTM {
 //#endregion source-navbar-types
 
 //#region source-onboarding
-/** Source: `test/components/onboarding.i18n` */
-export declare function t8(sourceId: "onboarding"): onboardingTM;
+
+interface whoaExport {
+  /** Source: `test/components/onboarding.i18n` */
+  (sourceId: "onboarding"): onboardingTM;
+}
+
 export interface onboardingTM {
   /**
    * ## firstWelcome.helloUserA
    * `Welcome to MaestroQA $firstName`\
    * `firstName` Example "Camilla"\
    * **Examples**:\
-   * en: "Welcome to MaestroQA $firstName";\
-   * kr: ""; */
+   * en: "Welcome to MaestroQA $firstName"\
+   * es: ""\
+   */
   key(
     key: "firstWelcome.helloUserA"
   ): {
@@ -325,9 +380,10 @@ export interface onboardingTM {
      * `Welcome to MaestroQA $firstName`\
      * `firstName` Example "Camilla"\
      * **Examples**:\
-     * en: "Welcome to MaestroQA $firstName";\
-     * kr: ""; */
-    s: (vars: T8onboardingfirstWelcomehelloUserAVars) => string;
+     * en: "Welcome to MaestroQA $firstName"\
+     * es: ""\
+     */
+    s: (vars: TmplonboardingfirstWelcomehelloUserAVars) => string;
   };
 
   /** @deprecated Please remove placeholder to use i18n translations */
@@ -345,8 +401,9 @@ export interface onboardingTM {
    * `firstName` Example "Jane"\
    * `lastName` Example "Singh"\
    * **Examples**:\
-   * en: "Welcome to MaestroQA $firstName $lastName!";\
-   * kr: ""; */
+   * en: "Welcome to MaestroQA $firstName $lastName!"\
+   * es: ""\
+   */
   key(
     key: "firstWelcome.helloUserB"
   ): {
@@ -356,9 +413,10 @@ export interface onboardingTM {
      * `firstName` Example "Jane"\
      * `lastName` Example "Singh"\
      * **Examples**:\
-     * en: "Welcome to MaestroQA $firstName $lastName!";\
-     * kr: ""; */
-    s: (vars: T8onboardingfirstWelcomehelloUserBVars) => string;
+     * en: "Welcome to MaestroQA $firstName $lastName!"\
+     * es: ""\
+     */
+    s: (vars: TmplonboardingfirstWelcomehelloUserBVars) => string;
   };
 
   /** @deprecated Please remove placeholder to use i18n translations */
@@ -375,8 +433,9 @@ export interface onboardingTM {
    * `Welcome to MaestroQA $firstName`\
    * `firstName` Example "Cole"\
    * **Examples**:\
-   * en: "Welcome to MaestroQA $firstName";\
-   * kr: ""; */
+   * en: "Welcome to MaestroQA $firstName"\
+   * es: ""\
+   */
   key(
     key: "secondWelcome.helloUser"
   ): {
@@ -385,9 +444,10 @@ export interface onboardingTM {
      * `Welcome to MaestroQA $firstName`\
      * `firstName` Example "Cole"\
      * **Examples**:\
-     * en: "Welcome to MaestroQA $firstName";\
-     * kr: ""; */
-    s: (vars: T8onboardingsecondWelcomehelloUserVars) => string;
+     * en: "Welcome to MaestroQA $firstName"\
+     * es: ""\
+     */
+    s: (vars: TmplonboardingsecondWelcomehelloUserVars) => string;
   };
 
   /** @deprecated Please remove placeholder to use i18n translations */
@@ -414,18 +474,18 @@ export interface onboardingTM {
 //#endregion source-onboarding
 //#region source-onboarding-types
 
-type T8onboardingfirstWelcomehelloUserAVars = {
+type TmplonboardingfirstWelcomehelloUserAVars = {
   /** Example "Camilla" */
   firstName: string;
 };
-type T8onboardingfirstWelcomehelloUserBVars = {
+type TmplonboardingfirstWelcomehelloUserBVars = {
   /** Example "Jane" */
   firstName: string;
 
   /** Example "Singh" */
   lastName: string;
 };
-type T8onboardingsecondWelcomehelloUserVars = {
+type TmplonboardingsecondWelcomehelloUserVars = {
   /** Example "Cole" */
   firstName: string;
 };
@@ -433,16 +493,21 @@ type T8onboardingsecondWelcomehelloUserVars = {
 //#endregion source-onboarding-types
 
 //#region source-reportDashboard
-/** Source: `test/components/reportDashboard.i18n` */
-export declare function t8(sourceId: "reportDashboard"): reportDashboardTM;
+
+interface whoaExport {
+  /** Source: `test/components/reportDashboard.i18n` */
+  (sourceId: "reportDashboard"): reportDashboardTM;
+}
+
 export interface reportDashboardTM {
   /**
    * ## topbar.home
    * `Home`\
    * *No variables*\
    * **Examples**:\
-   * en: "Home";\
-   * kr: ""; */
+   * en: "Home"\
+   * es: ""\
+   */
   key(
     key: "topbar.home"
   ): {
@@ -451,8 +516,9 @@ export interface reportDashboardTM {
      * `Home`\
      * *No variables*\
      * **Examples**:\
-     * en: "Home";\
-     * kr: ""; */
+     * en: "Home"\
+     * es: ""\
+     */
     s: () => string;
   };
 
@@ -470,8 +536,9 @@ export interface reportDashboardTM {
    * `Reports`\
    * *No variables*\
    * **Examples**:\
-   * en: "Reports";\
-   * kr: "akw"; */
+   * en: "Reports"\
+   * es: ""\
+   */
   key(
     key: "topbar.reports"
   ): {
@@ -480,8 +547,9 @@ export interface reportDashboardTM {
      * `Reports`\
      * *No variables*\
      * **Examples**:\
-     * en: "Reports";\
-     * kr: "akw"; */
+     * en: "Reports"\
+     * es: ""\
+     */
     s: () => string;
   };
 
@@ -499,8 +567,9 @@ export interface reportDashboardTM {
    * `$n people`\
    * `n` number of people\
    * **Examples**:\
-   * en: "$n people";\
-   * kr: "$n people"; */
+   * en: "$n people"\
+   * es: ""\
+   */
   key(
     key: "sendOutToUsers.nPeople"
   ): {
@@ -509,9 +578,10 @@ export interface reportDashboardTM {
      * `$n people`\
      * `n` number of people\
      * **Examples**:\
-     * en: "$n people";\
-     * kr: "$n people"; */
-    s: (vars: T8reportDashboardsendOutToUsersnPeopleVars) => string;
+     * en: "$n people"\
+     * es: ""\
+     */
+    s: (vars: TmplreportDashboardsendOutToUsersnPeopleVars) => string;
   };
 
   /** @deprecated Please remove placeholder to use i18n translations */
@@ -538,26 +608,29 @@ export interface reportDashboardTM {
 //#endregion source-reportDashboard
 //#region source-reportDashboard-types
 
-type T8reportDashboardsendOutToUsersnPeopleVars = {
+type TmplreportDashboardsendOutToUsersnPeopleVars = {
   /** number of people */
   n: string;
 };
 
 //#endregion source-reportDashboard-types
 
-/** This source does not yet exist */
-export declare function t8(
-  sourceId: string
-): {
-  /**
-   * ## Default
-   * Behaves the same way as looking up the key, if it's not found we use the provided placeholder and can log a warning
-   */
-  key(
-    key: string,
-    placeholder: string
-  ): {
-    /** ## Default */
-    s: (vars?: any) => string;
+interface whoaExport {
+  /** This source does not yet exist */
+  (sourceId: string): {
+    /**
+     * ## Default
+     * Behaves the same way as looking up the key, if it's not found we use the provided placeholder and can log a warning
+     */
+    key(
+      key: string,
+      placeholder: string
+    ): {
+      /** ## Default */
+      s: (vars?: any) => string;
+    };
   };
-};
+}
+
+
+export declare const whoa: whoaExport;
