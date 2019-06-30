@@ -39,23 +39,7 @@ const T = {
     },
     "topbar.reports": {
       "en": "Reports",
-      "kr": "akw"
-    }
-  },
-  "reportDashboard": {
-    "topbar.home": {
-      "en": "Home"
-    },
-    "topbar.reports": {
-      "en": "Reports",
-      "kr": "akw"
-    },
-    "sendOutToUsers.nPeople": {
-      "en": "$n people",
-      "kr": "$n people",
-      "vars": {
-        "n": "number of people"
-      }
+      "ko": "akw"
     }
   },
   "onboarding": {
@@ -76,6 +60,22 @@ const T = {
       "en": "Welcome to MaestroQA $firstName",
       "vars": {
         "firstName": "Example \"Cole\""
+      }
+    }
+  },
+  "reportDashboard": {
+    "topbar.home": {
+      "en": "Home"
+    },
+    "topbar.reports": {
+      "en": "Reports",
+      "ko": "akw"
+    },
+    "sendOutToUsers.nPeople": {
+      "en": "$n people",
+      "ko": "$n people",
+      "vars": {
+        "n": "number of people"
       }
     }
   }

@@ -3,11 +3,11 @@ topbar:
     en: Home
   reports:
     en: Reports
-    kr: akw
+    ko: akw
 
 sendOutToUsers:
   nPeople:
     en: $n people
-    kr: $n people
+    ko: $n people
     vars:
       n: number of people

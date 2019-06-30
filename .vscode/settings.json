@@ -2,7 +2,7 @@
     "yaml.format.enable": true,
     "yaml.schemaStore.enable": false,
     "yaml.schemas": {
-        "./i18n-tools/i18n.schema.json": "**/*.i18n"
+        "./i18n.schema.json": "**/*.i18n"
     },
     "files.associations": {
         "*.i18n": "yaml"

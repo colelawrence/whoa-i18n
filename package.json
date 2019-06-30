@@ -1,7 +1,19 @@
 {
+  "name": "whoa-i18n",
+  "main": "dist/index.ts",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "whoa": "dist/bin.js"
+  },
+  "files": [
+    "dist/",
+    "register/",
+    "LICENSE"
+  ],
   "scripts": {
+    "build": "rimraf dist && tsc",
     "generate": "node -r ts-node/register ./i18n-tools/generate.ts",
-    "server": "node -r ts-node/register ./i18n-tools/server.ts"
+    "server": "node -r ./node_modules/ts-node/register ./i18n-tools/server.ts"
   },
   "devDependencies": {
     "@types/express": "^4.17.0",

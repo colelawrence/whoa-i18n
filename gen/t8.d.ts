@@ -1,5 +1,5 @@
 //#region source-favoriteFruits
-/** Source: `components/favoriteFruits.i18n` */
+/** Source: `test/components/favoriteFruits.i18n` */
 export declare function t8(sourceId: "favoriteFruits"): favoriteFruitsTM;
 export interface favoriteFruitsTM {
   /**
@@ -228,7 +228,7 @@ type T8favoriteFruitsorangeotherVars = {
 //#endregion source-favoriteFruits-types
 
 //#region source-navbar
-/** Source: `components/navbar.i18n` */
+/** Source: `test/components/navbar.i18n` */
 export declare function t8(sourceId: "navbar"): navbarTM;
 export interface navbarTM {
   /**
@@ -306,121 +306,8 @@ export interface navbarTM {
 
 //#endregion source-navbar-types
 
-//#region source-reportDashboard
-/** Source: `components/reportDashboard.i18n` */
-export declare function t8(sourceId: "reportDashboard"): reportDashboardTM;
-export interface reportDashboardTM {
-  /**
-   * ## topbar.home
-   * `Home`\
-   * *No variables*\
-   * **Examples**:\
-   * en: "Home";\
-   * kr: ""; */
-  key(
-    key: "topbar.home"
-  ): {
-    /**
-     * ## topbar.home
-     * `Home`\
-     * *No variables*\
-     * **Examples**:\
-     * en: "Home";\
-     * kr: ""; */
-    s: () => string;
-  };
-
-  /** @deprecated Please remove placeholder to use i18n translations */
-  key(
-    key: "topbar.home",
-    placeholder: string
-  ): {
-    /** @deprecated Please remove placeholder to use i18n translations */
-    s: (vars?: any) => string;
-  };
-
-  /**
-   * ## topbar.reports
-   * `Reports`\
-   * *No variables*\
-   * **Examples**:\
-   * en: "Reports";\
-   * kr: "akw"; */
-  key(
-    key: "topbar.reports"
-  ): {
-    /**
-     * ## topbar.reports
-     * `Reports`\
-     * *No variables*\
-     * **Examples**:\
-     * en: "Reports";\
-     * kr: "akw"; */
-    s: () => string;
-  };
-
-  /** @deprecated Please remove placeholder to use i18n translations */
-  key(
-    key: "topbar.reports",
-    placeholder: string
-  ): {
-    /** @deprecated Please remove placeholder to use i18n translations */
-    s: (vars?: any) => string;
-  };
-
-  /**
-   * ## sendOutToUsers.nPeople
-   * `$n people`\
-   * `n` number of people\
-   * **Examples**:\
-   * en: "$n people";\
-   * kr: "$n people"; */
-  key(
-    key: "sendOutToUsers.nPeople"
-  ): {
-    /**
-     * ## sendOutToUsers.nPeople
-     * `$n people`\
-     * `n` number of people\
-     * **Examples**:\
-     * en: "$n people";\
-     * kr: "$n people"; */
-    s: (vars: T8reportDashboardsendOutToUsersnPeopleVars) => string;
-  };
-
-  /** @deprecated Please remove placeholder to use i18n translations */
-  key(
-    key: "sendOutToUsers.nPeople",
-    placeholder: string
-  ): {
-    /** @deprecated Please remove placeholder to use i18n translations */
-    s: (vars?: any) => string;
-  };
-
-  /**
-   * ## Default
-   * Behaves the same way as looking up the key, if it's not found we use the provided placeholder and can log a warning
-   */
-  key(
-    key: string,
-    placeholder: string
-  ): {
-    /** ## Default */
-    s: (vars?: any) => string;
-  };
-}
-//#endregion source-reportDashboard
-//#region source-reportDashboard-types
-
-type T8reportDashboardsendOutToUsersnPeopleVars = {
-  /** number of people */
-  n: string;
-};
-
-//#endregion source-reportDashboard-types
-
 //#region source-onboarding
-/** Source: `components/onboarding.i18n` */
+/** Source: `test/components/onboarding.i18n` */
 export declare function t8(sourceId: "onboarding"): onboardingTM;
 export interface onboardingTM {
   /**
@@ -544,6 +431,119 @@ type T8onboardingsecondWelcomehelloUserVars = {
 };
 
 //#endregion source-onboarding-types
+
+//#region source-reportDashboard
+/** Source: `test/components/reportDashboard.i18n` */
+export declare function t8(sourceId: "reportDashboard"): reportDashboardTM;
+export interface reportDashboardTM {
+  /**
+   * ## topbar.home
+   * `Home`\
+   * *No variables*\
+   * **Examples**:\
+   * en: "Home";\
+   * kr: ""; */
+  key(
+    key: "topbar.home"
+  ): {
+    /**
+     * ## topbar.home
+     * `Home`\
+     * *No variables*\
+     * **Examples**:\
+     * en: "Home";\
+     * kr: ""; */
+    s: () => string;
+  };
+
+  /** @deprecated Please remove placeholder to use i18n translations */
+  key(
+    key: "topbar.home",
+    placeholder: string
+  ): {
+    /** @deprecated Please remove placeholder to use i18n translations */
+    s: (vars?: any) => string;
+  };
+
+  /**
+   * ## topbar.reports
+   * `Reports`\
+   * *No variables*\
+   * **Examples**:\
+   * en: "Reports";\
+   * kr: "akw"; */
+  key(
+    key: "topbar.reports"
+  ): {
+    /**
+     * ## topbar.reports
+     * `Reports`\
+     * *No variables*\
+     * **Examples**:\
+     * en: "Reports";\
+     * kr: "akw"; */
+    s: () => string;
+  };
+
+  /** @deprecated Please remove placeholder to use i18n translations */
+  key(
+    key: "topbar.reports",
+    placeholder: string
+  ): {
+    /** @deprecated Please remove placeholder to use i18n translations */
+    s: (vars?: any) => string;
+  };
+
+  /**
+   * ## sendOutToUsers.nPeople
+   * `$n people`\
+   * `n` number of people\
+   * **Examples**:\
+   * en: "$n people";\
+   * kr: "$n people"; */
+  key(
+    key: "sendOutToUsers.nPeople"
+  ): {
+    /**
+     * ## sendOutToUsers.nPeople
+     * `$n people`\
+     * `n` number of people\
+     * **Examples**:\
+     * en: "$n people";\
+     * kr: "$n people"; */
+    s: (vars: T8reportDashboardsendOutToUsersnPeopleVars) => string;
+  };
+
+  /** @deprecated Please remove placeholder to use i18n translations */
+  key(
+    key: "sendOutToUsers.nPeople",
+    placeholder: string
+  ): {
+    /** @deprecated Please remove placeholder to use i18n translations */
+    s: (vars?: any) => string;
+  };
+
+  /**
+   * ## Default
+   * Behaves the same way as looking up the key, if it's not found we use the provided placeholder and can log a warning
+   */
+  key(
+    key: string,
+    placeholder: string
+  ): {
+    /** ## Default */
+    s: (vars?: any) => string;
+  };
+}
+//#endregion source-reportDashboard
+//#region source-reportDashboard-types
+
+type T8reportDashboardsendOutToUsersnPeopleVars = {
+  /** number of people */
+  n: string;
+};
+
+//#endregion source-reportDashboard-types
 
 /** This source does not yet exist */
 export declare function t8(

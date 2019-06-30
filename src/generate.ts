@@ -5,10 +5,7 @@ import { SourceFile, findSourceFiles } from "./sourceFiles";
 
 import * as prettier from "prettier";
 
-const t8JSTemplate = fs.readFileSync(
-  path.resolve(__dirname, "templates/t8.js"),
-  "utf8"
-);
+const t8JSTemplate = fs.readFileSync(path.resolve("templates/t8.js"), "utf8");
 
 const warn = console.warn.bind(console, "generate.ts");
 
@@ -17,14 +14,14 @@ if (require.main === module) {
 }
 
 async function main() {
-  const t8 = await makeT8(findSourceFiles("."), {
+  const t8 = await makeT8(await findSourceFiles("."), {
     allowUnspecifiedModules: true,
     allowKeyPlaceholders: true
   });
   Promise.all([
-    fs.promises.writeFile(path.resolve(__dirname, "gen/t8.d.ts"), t8.t8DTSEmit),
+    fs.promises.writeFile(path.resolve("gen/t8.d.ts"), t8.t8DTSEmit),
     fs.promises.writeFile(
-      path.resolve(__dirname, "gen/t8.js"),
+      path.resolve("gen/t8.js"),
       '/// <reference path="./t8.d.ts" />\n' + t8.t8JSEmit
     )
   ]);
@@ -33,10 +30,7 @@ async function main() {
 export async function makeT8(files: SourceFile[], opts: GenerateOptions) {
   const defs = [];
   const ns = {};
-  const collectEach = collectInto(
-    { defs, ns },
-    opts
-  );
+  const collectEach = collectInto({ defs, ns }, opts);
   await Promise.all(files.map(collectEach));
 
   if (opts.allowUnspecifiedModules) {
@@ -52,12 +46,12 @@ export async function makeT8(files: SourceFile[], opts: GenerateOptions) {
         s: (vars?: any) => string
       };
     };
-    `)
+    `);
   } else {
     defs.push(`
     /** This source does not yet exist */
     export declare function t8(sourceId: string): never;
-    `)
+    `);
   }
 
   const t8JSEmit = t8JSTemplate.replace(
@@ -105,10 +99,9 @@ function collectInto(
   };
 }
 
-
 type GenerateOptions = {
-  allowUnspecifiedModules?: boolean,
-  allowKeyPlaceholders?: boolean,
+  allowUnspecifiedModules?: boolean;
+  allowKeyPlaceholders?: boolean;
 };
 
 function generateDefinitions(
@@ -131,7 +124,9 @@ function generateDefinitions(
   append(`//#region source-${sourceId}`);
   const interfaceId = `${sourceId}TM`;
   append(`/** ${notes} */`);
-  append(`export declare function t8(sourceId: "${sourceId}"): ${interfaceId};`);
+  append(
+    `export declare function t8(sourceId: "${sourceId}"): ${interfaceId};`
+  );
   append(`export interface ${interfaceId} {`);
 
   for (let id in mod) {
@@ -235,7 +230,7 @@ function transToDocString(title: string, trans: Translation): string {
   return `/**\n * ## ${title}\n * \`${
     trans.en
   }\`\\\n * ${prefix}\\\n * **Examples**:\\\n * en: "${trans.en ||
-    ""}";\\\n * kr: "${trans.kr || ""}"; */`;
+    ""}";\\\n * kr: "${trans.ko || ""}"; */`;
 }
 
 /**

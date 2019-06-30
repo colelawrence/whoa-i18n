@@ -7,10 +7,10 @@ import { TranslationModule } from "./types";
 export class SourceFile {
   private state: TranslationModule;
   private dirty = false;
-  public readonly name: string
+  public readonly name: string;
 
   constructor(public readonly path: string) {
-    this.name = basename(this.path).replace(/\..+$/, '');
+    this.name = basename(this.path).replace(/\..+$/, "");
   }
 
   async read(): Promise<TranslationModule> {
@@ -28,8 +28,7 @@ export class SourceFile {
 
   async save(): Promise<void> {
     if (this.dirty) {
-      await fs.promises
-        .writeFile(this.path, yaml.dump(this.state));
+      await fs.promises.writeFile(this.path, yaml.dump(this.state));
       this.dirty = false;
     } else {
       return Promise.resolve();
@@ -39,6 +38,6 @@ export class SourceFile {
 
 export function findSourceFiles(dir: string): SourceFile[] {
   return glob
-    .sync("**/*.i18n", { cwd: dir, ignore: ["**/node_modules/**"] })
+    .sync("**/*.i18n", { cwd: dir, ignore: "**/node_modules/**" })
     .map(i18nPath => new SourceFile(i18nPath));
 }
