@@ -17,6 +17,16 @@ export type GenOptions = {
   languages: string[];
 };
 
+export async function makeSchema(opts: GenOptions): Promise<string> {
+  const schemaContent = await getSchemaContent()
+  const schema = JSON.parse(schemaContent)
+  const translationProperties = schema["definitions"]["Translation"]["properties"]
+  opts.languages.forEach(lang => {
+    translationProperties[lang] = { type: "string" }
+  });
+  return JSON.stringify(schema, null, 2);
+}
+
 export async function makeJS(opts: GenOptions): Promise<string> {
   return ts.transpile(await makeTS(opts));
 }
@@ -98,6 +108,15 @@ function replaceRegion(source: string, region: string, with_: string): string {
 async function getFnTemplateContent(): Promise<string> {
   return new Promise((res, rej) =>
     readFile(resolve(__dirname, "../templates/fn.ts"), "utf8", (err, data) => {
+      if (err) rej(err);
+      else res(data);
+    })
+  );
+}
+
+async function getSchemaContent(): Promise<string> {
+  return new Promise((res, rej) =>
+    readFile(resolve(__dirname, "../templates/schema.json"), "utf8", (err, data) => {
       if (err) rej(err);
       else res(data);
     })

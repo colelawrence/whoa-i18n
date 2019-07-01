@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 
 import { VERSION } from ".";
-import { makeJS, makeTS, GenOptions, makeDTS, makeSchema } from "./gen";
+import { GenOptions } from "./gen";
 import { findSourceFiles } from "./sourceFiles";
 import { ARGS, ProjectCLIOptions, HELP_PROJECT_OPTIONS } from "./project-args";
-
-type GenCommand = "types" | "schema" | "js" | "ts";
+import { start } from "./author-server";
 
 const out = console.log.bind(console);
 const err = console.error.bind(console);
@@ -13,17 +12,18 @@ const err = console.error.bind(console);
 const command = ARGS.command[0];
 
 const HELP = `\
-Usage: whoa <command> [options]
+Usage: whoa-author-server [options]
+       whoa-author-server <command> [options]
 
 where <command> is one of:
-    help, js, schema, ts, types, version
+    help, version
 
 and [options] might include:
 ${HELP_PROJECT_OPTIONS}
 
-whoa@${VERSION}`;
+whoa-author-server@${VERSION}`;
 
-const args = ARGS.command.slice(0);
+const args = ARGS.command.slice(1);
 if (args.length > 0) {
   err(`Unrecognized additional args: ${args}\n\n${HELP}`)
   process.exit(1)
@@ -31,14 +31,8 @@ if (args.length > 0) {
 
 const cliOptions = ARGS.options;
 switch (command) {
-  case "types":
-  case "schema":
-  case "js":
-  case "ts":
-    execute(command, cliOptions);
-    break;
   case undefined:
-    out("no args");
+    execute(cliOptions);
     break;
   case "help":
     out(HELP);
@@ -51,7 +45,7 @@ switch (command) {
     process.exit(1)
 }
 
-async function execute(command: GenCommand, opts: ProjectCLIOptions) {
+async function execute(opts: ProjectCLIOptions) {
   const genOptions: GenOptions = {
     fnName: opts.fnName,
     languages: opts.languages,
@@ -61,18 +55,6 @@ async function execute(command: GenCommand, opts: ProjectCLIOptions) {
       exclude: opts.exclude
     })
   };
-  switch (command) {
-    case "types":
-      makeDTS(genOptions).then(out);
-      break;
-    case "js":
-      makeJS(genOptions).then(out);
-      break;
-    case "ts":
-      makeTS(genOptions).then(out);
-      break;
-    case "schema":
-      makeSchema(genOptions).then(out);
-      break;
-  }
+
+  start(genOptions)
 }

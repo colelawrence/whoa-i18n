@@ -7,23 +7,6 @@ import * as prettier from "prettier";
 
 const warn = console.warn.bind(console, "generate.ts");
 
-if (require.main === module) {
-  main();
-}
-
-async function main() {
-  const t8 = await makeT8(await findSourceFiles("."), {
-    allowUnspecifiedModules: true,
-    allowKeyPlaceholders: true,
-    declarationsOnly: false,
-    languages: ["en", "ko", "es"],
-    fnName: "t8",
-    fnTypeId: "t8Export"
-  });
-
-  console.log(t8);
-}
-
 export type MakeResult = {
   T: { [sourceId: string]: { [key: string]: Translation } };
   FnDecl: string;

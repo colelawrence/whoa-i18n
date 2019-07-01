@@ -33,6 +33,12 @@
               }
             }
           ]
+        },
+        "en": {
+          "type": "string"
+        },
+        "es": {
+          "type": "string"
         }
       },
       "additionalProperties": false

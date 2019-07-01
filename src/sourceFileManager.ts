@@ -1,16 +1,26 @@
 import { SourceFile } from "./sourceFiles";
 import { TranslationModule, Lang } from "./types";
 
-const warn = console.warn.bind(console, 'sourceFileManager.ts')
+const warn = console.warn.bind(console, "sourceFileManager");
 
 export class SourceFileManager {
   private map: { [name: string]: SourceFile };
-  constructor(private files: SourceFile[], private onChange: () => any) {
-    this.map = files.reduce((map, source) => (map[source.name] = source), {});
+  constructor(files: SourceFile[], private onChange: () => any) {
+    this.map = files.reduce(
+      (map, source) => {
+        map[source.name] = source;
+        return map;
+      },
+      {} as { [name: string]: SourceFile }
+    );
+  }
+
+  async saveAll(): Promise<any> {
+    return Promise.all(this.getFiles().map(file => file.save()));
   }
 
   getFiles(): SourceFile[] {
-    return Object.values(this.map)
+    return Object.values(this.map);
   }
 
   async updateKey(
@@ -38,6 +48,10 @@ export class SourceFileManager {
         lang,
         newTemplate
       );
+
+      // share update with manager
+      source.update(tm);
+      this.onChange();
     } catch {
       throw new Error(`malformed key "${key}"`);
     }
@@ -74,9 +88,11 @@ function updateTranslationModuleTemplate(
     missingVars.forEach(missingVar => {
       warn(
         `Removing var from (${sourceId}) "${id}.${variant}": { ${missingVar}: ${JSON.stringify(
+          //@ts-ignore
           variantVal.vars[missingVar]
         )} }`
       );
+      //@ts-ignore
       delete variantVal.vars[missingVar];
     });
   } else {
@@ -86,7 +102,7 @@ function updateTranslationModuleTemplate(
 
 function collectTextVars(text: string): { [id: string]: string } {
   const re = /\$(\w+)\$/g;
-  let match: RegExpMatchArray = null;
+  let match: RegExpMatchArray | null = null;
   const collect: { [id: string]: string } = {};
   while ((match = re.exec(text)) != null) {
     collect[match[1]] = "no description yet";

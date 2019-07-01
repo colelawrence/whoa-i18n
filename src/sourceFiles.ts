@@ -1,8 +1,10 @@
 import fs = require("fs");
 import glob = require("glob");
-import { basename } from "path";
+import { basename, resolve } from "path";
 import yaml = require("js-yaml");
 import { TranslationModule } from "./types";
+import { cloneDeep } from "lodash";
+import { promisify } from "util";
 
 export class SourceFile {
   private state?: TranslationModule;
@@ -13,17 +15,19 @@ export class SourceFile {
     this.name = basename(this.path).replace(/\..+$/, "");
   }
 
+  /** resolves deep cloned values */
   async read(): Promise<TranslationModule> {
-    if (this.state != null) return Promise.resolve(this.state);
+    if (this.state != null) return Promise.resolve(cloneDeep(this.state));
     const text = await fs.promises.readFile(this.path, "utf8");
     const newState = yaml.load(text);
     this.state = newState;
     this.dirty = false;
-    return newState;
+    return cloneDeep(newState);
   }
 
+  /** sets state to a deep cloned value */
   update(mod: TranslationModule) {
-    this.state = mod;
+    this.state = cloneDeep(mod);
     this.dirty = true;
   }
 
@@ -37,18 +41,34 @@ export class SourceFile {
   }
 }
 
-export function findSourceFiles(dir?: string): SourceFile[] {
-  return globSourceFiles({ rootDir: dir, glob: "**/*.i18n" });
-}
+const globAsync = promisify(glob);
 
-export function globSourceFiles(params: {
-  rootDir?: string;
-  glob: string;
-}): SourceFile[] {
-  return glob
-    .sync(params.glob, {
-      cwd: params.rootDir || ".",
-      ignore: "**/node_modules/**"
-    })
-    .map(i18nPath => new SourceFile(i18nPath));
+export async function findSourceFiles(params: {
+  rootDir: string;
+  include: string[];
+  exclude: string[];
+}): Promise<SourceFile[]> {
+  params.include.forEach(pattern => {
+    if (pattern.includes(","))
+      throw new Error(`Unrecognized character "," in include pattern`);
+    if (pattern.includes("{"))
+      throw new Error(`Unrecognized character "{" in include pattern`);
+    if (pattern.includes("}"))
+      throw new Error(`Unrecognized character "}" in include pattern`);
+  });
+
+  const pattern =
+    params.include.length === 1
+      ? params.include[0]
+      : `{${params.include.join(",")}}`;
+
+  console.log({ pattern, include: params.include });
+
+  return globAsync(pattern, {
+    nodir: true,
+    cwd: params.rootDir,
+    ignore: params.exclude
+  }).then(paths =>
+    paths.map(path => new SourceFile(resolve(params.rootDir, path)))
+  );
 }

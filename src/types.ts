@@ -1,5 +1,5 @@
 // https://www.loc.gov/standards/iso639-2/php/code_list.php
-export type Lang = 'en' | 'es' | 'ko'
+export type Lang = string
 
 export type Translation = {
   /** Variables used in template interpolation */
