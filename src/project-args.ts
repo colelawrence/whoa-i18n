@@ -2,7 +2,7 @@ import arg = require("arg");
 import { resolve } from "path";
 import { omitBy, isNil } from "lodash";
 
-export const args = arg({
+const args = arg({
   "--fnName": String,
   "--languages": [String],
   "--include": [String],
@@ -12,6 +12,8 @@ export const args = arg({
   // Aliases
   "-F": "--fnName",
   "-L": "--languages"
+}, {
+  permissive: true
 });
 
 export type ProjectCLIOptions = {

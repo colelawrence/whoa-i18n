@@ -23,7 +23,7 @@ ${HELP_PROJECT_OPTIONS}
 
 whoa@${VERSION}`;
 
-const args = ARGS.command.slice(0);
+const args = ARGS.command.slice(1);
 if (args.length > 0) {
   err(`Unrecognized additional args: ${args}\n\n${HELP}`)
   process.exit(1)
@@ -47,7 +47,7 @@ switch (command) {
     out(VERSION);
     break;
   default:
-    err(`Unknown command "${command}"\n\n${HELP}`);
+    err(`Unknown argument "${command}"\n\n${HELP}`);
     process.exit(1)
 }
 

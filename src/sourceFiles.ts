@@ -62,8 +62,6 @@ export async function findSourceFiles(params: {
       ? params.include[0]
       : `{${params.include.join(",")}}`;
 
-  console.log({ pattern, include: params.include });
-
   return globAsync(pattern, {
     nodir: true,
     cwd: params.rootDir,

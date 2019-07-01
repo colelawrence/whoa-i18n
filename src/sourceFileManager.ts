@@ -3,6 +3,13 @@ import { TranslationModule, Lang } from "./types";
 
 const warn = console.warn.bind(console, "sourceFileManager");
 
+export type LookupKey = {
+  sourceId: string;
+  lang: Lang;
+  id: string;
+  variant: string;
+};
+
 export class SourceFileManager {
   private map: { [name: string]: SourceFile };
   constructor(files: SourceFile[], private onChange: () => any) {
@@ -23,52 +30,30 @@ export class SourceFileManager {
     return Object.values(this.map);
   }
 
-  async updateKey(
-    lang: Lang,
-    sourceId: string,
-    key: string,
-    newTemplate: string
-  ) {
-    try {
-      // parse key
-      const [id, variant] = key.split(".");
+  async updateKey(key: LookupKey, newTemplate: string) {
+    // lookup key
+    const source = this.map[key.sourceId];
+    if (source == null)
+      throw new Error(`Module "${key.sourceId}" does not exist in sources`);
 
-      // lookup key
-      const source = this.map[sourceId];
-      if (source == null)
-        throw new Error(`Module "${sourceId}" does not exist in sources`);
+    // update in place
+    const tm = await source.read();
+    updateTranslationModuleTemplate(key, tm, newTemplate);
 
-      // update in place
-      const tm = await source.read();
-      updateTranslationModuleTemplate(
-        sourceId,
-        tm,
-        id,
-        variant,
-        lang,
-        newTemplate
-      );
-
-      // share update with manager
-      source.update(tm);
-      this.onChange();
-    } catch {
-      throw new Error(`malformed key "${key}"`);
-    }
+    // share update with manager
+    source.update(tm);
+    this.onChange();
   }
 }
 
 function updateTranslationModuleTemplate(
-  sourceId: string,
+  key: LookupKey,
   tm: TranslationModule,
-  id: string,
-  variant: string,
-  lang: Lang,
   template: string
 ) {
-  const idVal = (tm[id] = tm[id] || {});
-  const variantVal = (idVal[variant] = idVal[variant] || {});
-  variantVal[lang] = template;
+  const idVal = (tm[key.id] = tm[key.id] || {});
+  const variantVal = (idVal[key.variant] = idVal[key.variant] || {});
+  variantVal[key.lang] = template;
 
   // sanity checks on variables
   const vars = collectTextVars(variantVal.en + " " + variantVal.ko);
@@ -87,7 +72,9 @@ function updateTranslationModuleTemplate(
 
     missingVars.forEach(missingVar => {
       warn(
-        `Removing var from (${sourceId}) "${id}.${variant}": { ${missingVar}: ${JSON.stringify(
+        `Removing var from (${key.sourceId}) "${key.id}.${
+          key.variant
+        }": { ${missingVar}: ${JSON.stringify(
           //@ts-ignore
           variantVal.vars[missingVar]
         )} }`

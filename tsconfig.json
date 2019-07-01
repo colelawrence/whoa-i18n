@@ -2,7 +2,6 @@
   "compilerOptions": {
     "target": "es2015",
     "lib": ["es2015"],
-    "rootDir": "src",
     "outDir": "dist",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -13,5 +12,9 @@
     "types": ["node", "mocha"],
     "incremental": true
   },
-  "include": ["src/**/*.ts", "templates/fn.ts", "test/**/*.ts"],
+  "files": [
+    "./src/bin.ts",
+    "./src/bin-author-server.ts",
+    "./src/index.ts",
+  ]
 }

@@ -27,14 +27,15 @@ export function start(opts: GenOptions) {
 
   app.post("/update", async (req, res) => {
     console.log(req.body);
-    const { sourceId, key, lang, newTemplate } = req.query;
-    await sources.updateKey(lang, sourceId, key, newTemplate);
-    res.status(200).send("updated");
+    // const { sourceId, key, lang, newTemplate } = req.query;
+    // await sources.updateKey(lang, sourceId, key, newTemplate);
+    res.status(200).send("not implemented");
   });
-
+  
   app.post("/save", async (_req, res) => {
-    await sources.saveAll();
-    res.status(200).send("saved");
+    // await sources.saveAll();
+    // res.status(200).send("saved");
+    res.status(200).send("not implemented");
   });
 
   app.get("/test", async (_req, res) => {

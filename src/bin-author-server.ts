@@ -41,7 +41,7 @@ switch (command) {
     out(VERSION);
     break;
   default:
-    err(`Unknown command "${command}"\n\n${HELP}`);
+    err(`Unknown argument "${command}"\n\n${HELP}`);
     process.exit(1)
 }
 

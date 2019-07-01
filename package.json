@@ -1,7 +1,7 @@
 {
   "name": "whoa-i18n",
   "version": "0.1.0",
-  "main": "dist/index.ts",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
     "whoa": "dist/bin.js",
@@ -48,8 +48,8 @@
     "arg": "^4.1.0",
     "body-parser": "^1.19.0",
     "express": "4.17",
-    "glob": "7",
-    "js-yaml": "3",
+    "glob": "^7",
+    "js-yaml": ">=3.13.1",
     "lodash": "^4.17.11",
     "prettier": "1.18.2",
     "typescript": "^3.5.2"
